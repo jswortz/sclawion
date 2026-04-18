@@ -1,0 +1,10 @@
+Academic-paper figure, black-on-white, thin 1pt strokes, sans-serif.
+Three horizontal bands stacked top-to-bottom labeled CHAT LAYER,
+SWARM LAYER, NETWORK LAYER. Top band shows six rounded boxes
+Slack, Discord, Google Chat, WhatsApp, Teams, Signal feeding into
+a single rounded box "sclawion ingress". Middle band shows three
+rounded boxes "planner", "coder", "ops" connected by a Pub/Sub bus
+drawn as a thick horizontal line "Pub/Sub envelope sclawion/v1".
+Bottom band shows a SCION-IP Gateway, a SCION cloud (depicted as
+three diverging path lines), and a customer datacenter on the right.
+Annotate each band with its Cloud product in small caps.

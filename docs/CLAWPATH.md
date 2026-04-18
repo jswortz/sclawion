@@ -64,12 +64,12 @@ prompt: |
   Bottom band shows a SCION-IP Gateway, a SCION cloud (depicted as
   three diverging path lines), and a customer datacenter on the right.
   Annotate each band with its Cloud product in small caps.
-output: docs/figures/clawpath-layers.svg
+output: docs/figures/clawpath-layers.png
 caption: |
   CLAWPATH stacks three layers — chat, swarm, network — and uses the
   Pub/Sub envelope as the single contract between them.
 -->
-![CLAWPATH layers](figures/clawpath-layers.svg)
+![CLAWPATH layers](figures/clawpath-layers.png)
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
@@ -168,13 +168,13 @@ prompt: |
   containing "private GitLab", "Jira", "DB". Annotate every box with its
   GCP product in small caps. CMEK keys shown as small key icons on
   Pub/Sub topics and Firestore.
-output: docs/figures/clawpath-arch.svg
+output: docs/figures/clawpath-arch.png
 caption: |
   CLAWPATH end-to-end: chat in (left), swarm in the middle, customer
   network reached over SCION (right). The Pub/Sub envelope is the
   spine; nothing crosses layers without going through it.
 -->
-![CLAWPATH architecture](figures/clawpath-arch.svg)
+![CLAWPATH architecture](figures/clawpath-arch.png)
 
 ```mermaid
 flowchart LR

@@ -33,13 +33,13 @@ prompt: |
   P, C1, C2, R, D connected by directed arrows representing the
   Pub/Sub topic flow. Below each panel a one-line caption listing
   use cases.
-output: docs/figures/clawpath-swarm-topologies.svg
+output: docs/figures/clawpath-swarm-topologies.png
 caption: |
   Four common swarm topologies. The Pub/Sub bus implements all of them
   with the same primitives — only the topic filters and subscription
   fan-out change.
 -->
-![Swarm topologies](figures/clawpath-swarm-topologies.svg)
+![Swarm topologies](../figures/clawpath-swarm-topologies.png)
 
 ### Pipeline (planner → coder → reviewer → deployer)
 

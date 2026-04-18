@@ -1,0 +1,11 @@
+Academic-paper figure, black-on-white, thin 1pt strokes, sans-serif,
+16:9 landscape. Left side: a stack of three small rounded boxes
+labeled "agent pod (Cloud Run)" with an HTTP arrow leaving the top.
+Center: a SIG (SCION-IP Gateway) box that takes the IP traffic and
+emits SCION packets — show three diverging arrows representing
+multi-path. Each arrow passes through one or two AS-shaped hexagons
+with a small lock icon labeled "MAC verify". The arrows converge on
+the right at a customer-side SIG, which decapsulates to a final IP
+arrow into a "private GitLab" box. At the bottom of the figure,
+three small annotation arrows label: "(1) sender-selected paths",
+"(2) per-hop MAC", "(3) sovereign TRC per ISD".

@@ -1,0 +1,12 @@
+Academic-paper figure, black-on-white, thin 1pt strokes, sans-serif,
+16:9 landscape. Six chat icons on the far left (Slack, Discord,
+Google Chat, WhatsApp, Teams, Signal) feeding into a vertical lane
+labeled "GCP project: clawpath-prod". Inside that lane, top-to-bottom:
+ingress, Pub/Sub:inbound, swarm dispatcher, three agent pods (planner,
+coder, reviewer) sharing a Pub/Sub:swarm topic, scion-bridge,
+Pub/Sub:outbound, six emitter pods. Right edge of the lane has a SIG
+(SCION-IP Gateway) Cloud Run service. Far right is a SCION cloud
+with three diverging path lines crossing into a customer datacenter
+containing "private GitLab", "Jira", "DB". Annotate every box with its
+GCP product in small caps. CMEK keys shown as small key icons on
+Pub/Sub topics and Firestore.

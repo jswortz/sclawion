@@ -1,0 +1,6 @@
+Academic-paper figure, black-on-white, thin 1pt strokes, sans-serif.
+Four panels labeled (a) PIPELINE, (b) FAN-OUT, (c) MESH,
+(d) HIERARCHICAL, each showing 4-6 small rounded boxes labeled
+P, C1, C2, R, D connected by directed arrows representing the
+Pub/Sub topic flow. Below each panel a one-line caption listing
+use cases.
