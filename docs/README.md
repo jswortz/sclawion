@@ -30,3 +30,14 @@ doing, and what'd you'd lose porting elsewhere.
 ## I want to know where it's headed
 
 [`ROADMAP.md`](ROADMAP.md) — shipped, in-flight, parked, won't-do.
+
+## I want the enterprise / SCION story
+
+`sclawion` is the chat-bridge layer. **CLAWPATH** is the proposed
+enterprise tier: agent swarms + SCION-routed customer-network reach.
+
+1. [`CLAWPATH.md`](CLAWPATH.md) — the pun, the vision, the architecture
+2. [`clawpath/SCION.md`](clawpath/SCION.md) — what SCION is and why it matters
+3. [`clawpath/SWARMS.md`](clawpath/SWARMS.md) — remote agentic swarm patterns
+4. [`clawpath/E2E.md`](clawpath/E2E.md) — six-platform end-to-end demo
+5. [`clawpath/SECURITY.md`](clawpath/SECURITY.md) — customer-network security delta
