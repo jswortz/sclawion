@@ -1,0 +1,32 @@
+Academic-paper figure, black-on-white, thin 1pt strokes, sans-serif,
+16:9 landscape, two horizontal flows.
+
+Left side: one rounded box labeled "chat user" with a small subtitle
+"Slack · Discord · Google Chat · WhatsApp".
+
+Right side: one rounded box labeled "Scion Hub + agents".
+
+Between them, a horizontal pipeline of four rounded boxes left-to-right:
+"ingress", "router", "scion-bridge", "emitter".
+
+Top flow (left → right): an arrow labeled "webhook" from chat user into
+"ingress"; from "ingress" into a Pub/Sub topic icon (rounded rectangle
+with a small key icon for CMEK) labeled "Pub/Sub: inbound"; from that
+topic into "router"; from "router" into "Scion Hub + agents" with an
+arrow labeled "REST + ID token".
+
+Bottom flow (right → left): an arrow from "Scion Hub + agents" into
+"scion-bridge"; from "scion-bridge" into a second Pub/Sub topic icon
+labeled "Pub/Sub: outbound" (also with a CMEK key icon); from that
+topic into "emitter"; from "emitter" back to "chat user" with an arrow
+labeled "chat API".
+
+The four pipeline boxes (ingress, router, scion-bridge, emitter) sit
+inside a faint dashed rectangle labeled in the top-left corner
+"Cloud Run".
+
+Underneath the whole figure, a thin centered annotation strip in small
+caps: "Cloud Run · OIDC push · CMEK · Cloud Armor".
+
+No colors. Thin grey arrows for inbound flow, thin grey arrows for
+outbound flow. Box labels in plain sans-serif, all caps de-emphasized.

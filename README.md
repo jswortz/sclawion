@@ -13,13 +13,7 @@ a stateless, GCP-native bridge that puts every chat platform on the same wire
 — **GCP Pub/Sub** — so a Scion agent fleet can be addressed as if it were a
 teammate sitting in your channel.
 
-```
-┌──────────────┐                                              ┌──────────────┐
-│  chat user   │ ─── webhook ───▶ ingress ─── inbound  ──▶  router ─────────▶│   Scion Hub  │
-│ (slack/...)  │ ◀── chat API ─── emitter ◀── outbound ◀── scion-bridge ◀── │   + agents   │
-└──────────────┘                                              └──────────────┘
-                       Cloud Run · OIDC push · CMEK · Cloud Armor
-```
+![End-to-end flow](docs/figures/sclawion-flow.png)
 
 ## At a glance
 
