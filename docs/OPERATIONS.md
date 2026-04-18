@@ -19,11 +19,11 @@ Cutover via DNS weight change in Cloud DNS.
 Per environment:
 
 - 1× External HTTPS Load Balancer + Cloud Armor policy
-- 7× Cloud Run services: `ingress`, `router`, `scion-bridge`, and
-  `emitter-{slack,discord,gchat,whatsapp}`
+- 9× Cloud Run services: `admin-api`, `ingress`, `router`, `scion-bridge`,
+  and `emitter-{slack,discord,gchat,whatsapp,imessage}`
 - 4× Pub/Sub topics: `<env>.inbound`, `<env>.outbound`, `<env>.inbound.dead`,
   `<env>.outbound.dead`
-- 5× Pub/Sub push subscriptions (one to router, four to emitters with
+- 6× Pub/Sub push subscriptions (one to router, five to emitters with
   per-platform attribute filters)
 - 1× Firestore database (Native mode, multi-region in prod)
 - 1× KMS keyring with rotating crypto keys for Pub/Sub, Firestore, Artifact Registry

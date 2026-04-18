@@ -1,6 +1,7 @@
 // Command emitter receives Pub/Sub push messages from sclawion.outbound and
 // posts them back to the originating chat platform. One binary, --platform flag
-// selects which connector's Encoder to use; deploy as four Cloud Run services.
+// selects which connector's Encoder to use; deploy one Cloud Run service per
+// supported platform (currently slack, discord, gchat, whatsapp, imessage).
 package main
 
 import (

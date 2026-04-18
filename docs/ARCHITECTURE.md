@@ -191,7 +191,7 @@ scale-to-zero. Splitting them keeps each service single-purpose.
 ## Non-decisions (what we deliberately did not pick)
 
 - **Eventarc directly in front of Pub/Sub for ingress.** Eventarc doesn't yet
-  cover all four chat platforms cleanly; we'd lose signature-verification
+  cover all five chat platforms cleanly; we'd lose signature-verification
   control. Kept Cloud Run ingress so we own the auth path.
 - **Workflows for orchestration.** Workflows is great for synchronous step
   pipelines; this is event-driven and fan-out, where Pub/Sub is the right

@@ -121,7 +121,7 @@ mux.HandleFunc("/v1/mattermost", handler(mattermost.Verifier{...}, mattermost.De
 ```
 
 The `handler` factory should be the same generic shape used for the other
-four platforms — verify, decode, dedupe via replay cache, publish to inbound.
+platforms — verify, decode, dedupe via replay cache, publish to inbound.
 If you find yourself writing platform-specific code in `cmd/ingress` outside
 this registration, push it down into the connector.
 

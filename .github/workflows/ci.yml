@@ -1,0 +1,133 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  GO_VERSION: "1.22"
+
+jobs:
+  lint:
+    name: vet + staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - run: go mod download
+      - run: go vet ./...
+      - run: go install honnef.co/go/tools/cmd/staticcheck@latest
+      - run: staticcheck ./...
+
+  test:
+    name: test (-race -cover)
+    runs-on: ubuntu-latest
+    # GEMINI_API_KEY is exposed so future LLM-touching tests pick it up
+    # automatically. Aliased to GOOGLE_API_KEY to match the google-genai SDK
+    # convention used elsewhere in the repo. Both are no-ops on PRs from
+    # external forks (GitHub elides secrets there) — the rest of the suite
+    # is hermetic so the build still passes.
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - run: go mod download
+      - name: go test
+        run: |
+          go test -race -covermode=atomic -coverprofile=coverage.out \
+            -coverpkg=./pkg/...,./cmd/... \
+            ./...
+      - name: coverage summary
+        run: go tool cover -func=coverage.out | tail -20
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ github.sha }}
+          path: coverage.out
+          retention-days: 14
+
+  build:
+    name: build all cmd/
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - run: go build ./...
+      - name: build each service binary
+        run: |
+          for svc in admin-api ingress router scion-bridge emitter; do
+            echo "== $svc =="
+            go build -trimpath -o "/tmp/$svc" "./cmd/$svc"
+            ls -la "/tmp/$svc"
+          done
+
+  vuln:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+      - run: go install golang.org/x/vuln/cmd/govulncheck@latest
+      - run: govulncheck ./...
+
+  ruff:
+    name: ruff (python)
+    runs-on: ubuntu-latest
+    # The repo is Go-only today, but skill authoring (skills/openclaw/) and
+    # ad-hoc tooling tend to grow Python over time. This job is a no-op until
+    # a .py or pyproject.toml lands, then enforces ruff defaults automatically.
+    # Keeping the config inline avoids forcing contributors to add a
+    # pyproject.toml just to satisfy the linter.
+    steps:
+      - uses: actions/checkout@v4
+      - name: detect python sources
+        id: detect
+        run: |
+          if find . -path ./node_modules -prune -o -path ./.git -prune -o \
+              \( -name '*.py' -o -name 'pyproject.toml' \) -print | grep -q .; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "no python sources — skipping ruff"
+          fi
+      - uses: astral-sh/ruff-action@v3
+        if: steps.detect.outputs.found == 'true'
+        with:
+          # Project tone: small footprint, security-leaning. Rules:
+          # pycodestyle (E), pyflakes (F), bugbear (B), security (S),
+          # imports (I), pyupgrade (UP), simplify (SIM), naming (N).
+          args: "check --select E,F,B,S,I,UP,SIM,N --line-length 100 ."
+
+  third-party-deps-guard:
+    name: enforce stdlib-only
+    runs-on: ubuntu-latest
+    # CLAUDE.md and go.mod treat the dep tree as stdlib-only. Fail the build
+    # the moment a PR adds a non-stdlib import to go.mod, so it gets a
+    # conscious review instead of slipping in.
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          extra=$(awk '/^require/,/^)/' go.mod | grep -v '^\s*$' | grep -vE '^(require|\))' || true)
+          if [ -n "$extra" ]; then
+            echo "go.mod has non-stdlib requires:" >&2
+            echo "$extra" >&2
+            exit 1
+          fi

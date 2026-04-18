@@ -48,10 +48,24 @@ export FIRESTORE_EMULATOR_HOST=localhost:8086
   style: `feat(slack): handle thread replies`, `fix(router): dedupe by event.id`.
 - One logical change per PR. If a refactor enables a feature, that's two PRs.
 - Required for merge:
-  - All CI checks green (`go vet`, `go test`, `staticcheck`, `govulncheck`).
+  - All CI checks green ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
+    runs `go vet`, `staticcheck`, `go test -race -cover`, `govulncheck`,
+    `go build` per service, plus a stdlib-only guard on `go.mod`).
   - One reviewer approval; two for changes touching `pkg/auth`, `pkg/scion`,
     or `deploy/terraform/`.
   - Docs updated when behavior changes.
+
+### Repository secrets
+
+CI exposes the following secrets to test jobs:
+
+| Secret | Aliased as | Used by |
+|--------|------------|---------|
+| `GEMINI_API_KEY` | `GOOGLE_API_KEY` (matches `google-genai` SDK convention) | Future LLM-touching tests; safely empty for forks |
+
+Secrets are elided on PRs from external forks, so the build still passes
+on community contributions; tests that *require* the key must skip gracefully
+with `t.Skip("GEMINI_API_KEY not set")` rather than fail.
 
 ## Coding standards
 
@@ -64,6 +78,14 @@ export FIRESTORE_EMULATOR_HOST=localhost:8086
   `func F(ctx context.Context, x string) (Y, error)`.
 - Avoid third-party dependencies for things the standard library does:
   HTTP, JSON, HMAC, hex, time. Adding a dep needs justification in the PR.
+
+### Python (skill helpers, tooling)
+
+The repo is Go-only today, but if you add a `.py` file (e.g., a skill
+helper or a one-off script), CI will run `ruff` against it with rules
+`E,F,B,S,I,UP,SIM,N` and a 100-char line length — see the `ruff` job in
+[`.github/workflows/ci.yml`](../.github/workflows/ci.yml). No `pyproject.toml`
+is required; add one only if you want to override the inline defaults.
 
 ### Comments
 

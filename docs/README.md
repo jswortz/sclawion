@@ -2,19 +2,23 @@
 
 Deep-dive guides for `sclawion`. Read order depends on your role.
 
-## I want to use sclawion
+## I want to install and operate sclawion
 
-1. [`../README.md`](../README.md) — what it is, quickstart
-2. [`../examples/`](../examples/) — per-platform onboarding
-3. [`OPERATIONS.md`](OPERATIONS.md) — deployment and runbooks
+1. [`../README.md`](../README.md) — what it is, 30-second quickstart
+2. [`INSTALL.md`](INSTALL.md) — install, run, monitor, secure (end-to-end)
+3. [`CHAT-INTEGRATION.md`](CHAT-INTEGRATION.md) — onboard a chat workspace to a tenant
+4. [`AGENT-CONTEXT.md`](AGENT-CONTEXT.md) — bind agents to MCPs, skills, memory, swarms
+5. [`figures/admin-ui/`](figures/admin-ui/README.md) — screenshots of the control plane
+6. [`OPERATIONS.md`](OPERATIONS.md) — SLOs, runbooks, incident response
 
 ## I want to contribute code
 
 1. [`../CLAUDE.md`](../CLAUDE.md) — load-bearing context, read first
 2. [`ARCHITECTURE.md`](ARCHITECTURE.md) — components, sequences, design tradeoffs
 3. [`EVENT_SCHEMA.md`](EVENT_SCHEMA.md) — the envelope every service speaks
-4. [`CONTRIBUTING.md`](CONTRIBUTING.md) — workflow, standards
+4. [`CONTRIBUTING.md`](CONTRIBUTING.md) — workflow, standards, CI
 5. [`CONNECTORS.md`](CONNECTORS.md) — adding a new chat platform
+6. [`../pkg/connectors/README.md`](../pkg/connectors/README.md) — per-connector status matrix
 
 ## I want to review for security or compliance
 
