@@ -1,0 +1,26 @@
+{{define "header"}}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{.Title}} — sclawion admin</title>
+<link rel="stylesheet" href="/ui/static/style.css">
+<script src="/ui/static/htmx.min.js" defer></script>
+</head>
+<body>
+<header>
+  <strong>sclawion admin</strong>
+  <nav>
+    <a href="/ui/tenants" class="{{if eq .ActiveNav "tenants"}}active{{end}}">Tenants</a>
+    <a href="/ui/admin-users" class="{{if eq .ActiveNav "admin-users"}}active{{end}}">Admin Users</a>
+    <a href="/ui/audit" class="{{if eq .ActiveNav "audit"}}active{{end}}">Audit</a>
+  </nav>
+  <span class="who">{{.Caller.Email}} <em>({{.Caller.Role}})</em> · env={{.Env}}</span>
+</header>
+<main>
+{{end}}
+
+{{define "footer"}}
+</main>
+</body>
+</html>
+{{end}}

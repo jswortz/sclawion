@@ -1,0 +1,45 @@
+{{template "header" .}}
+{{$tid := .TenantID}}
+<h1>Agent profiles — <code>{{$tid}}</code></h1>
+<p><a href="/ui/tenants/{{$tid}}">← back to tenant</a></p>
+
+<table>
+  <thead><tr><th>ID</th><th>Name</th><th>Model</th><th>MCPs</th><th>Skills</th><th>Memory</th><th>$/hr</th></tr></thead>
+  <tbody>
+  {{range .Agents}}
+    <tr>
+      <td><code>{{.ID}}</code></td>
+      <td>{{.Name}}</td>
+      <td>{{.Model}}</td>
+      <td>{{range $i, $s := .MCPServers}}{{if $i}}, {{end}}{{$s}}{{end}}</td>
+      <td>{{range $i, $s := .Skills}}{{if $i}}, {{end}}{{$s}}{{end}}</td>
+      <td>{{.MemoryScope}}</td>
+      <td>{{.BudgetUSDPerHour}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="7" class="muted">No agent profiles yet.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+
+{{if eq .Caller.Role "owner"}}
+<section>
+  <h2>New agent profile</h2>
+  <form hx-post="/v1/tenants/{{$tid}}/agents" hx-ext="json-enc"
+        hx-on::after-request="if(event.detail.successful) location.reload()">
+    <label>ID <input name="id" pattern="[a-z][a-z0-9-]{1,62}" required></label>
+    <label>Name <input name="name" required></label>
+    <label>Model <input name="model" placeholder="claude-opus-4-7" required></label>
+    <label>MCP servers (comma sep) <input name="mcp_servers"></label>
+    <label>Skills (comma sep) <input name="skills"></label>
+    <label>Memory scope
+      <select name="memory_scope">
+        {{range .Memories}}<option value="{{.}}">{{.}}</option>{{end}}
+      </select>
+    </label>
+    <label>Budget USD/hr <input type="number" step="0.01" name="budget_usd_per_hour" value="0"></label>
+    <button type="submit">Create</button>
+  </form>
+</section>
+{{end}}
+{{template "footer" .}}

@@ -1,0 +1,29 @@
+{{template "header" .}}
+{{$tid := .TenantID}}
+<h1>Tenant: <code>{{$tid}}</code></h1>
+{{with .Tenant}}<p>{{.DisplayName}} {{if .Disabled}}<span class="muted">(disabled)</span>{{end}}</p>{{end}}
+<nav class="subnav">
+  <a href="/ui/tenants/{{$tid}}/connectors">Connectors</a>
+  <a href="/ui/tenants/{{$tid}}/agents">Agents</a>
+  <a href="/ui/tenants/{{$tid}}/swarms">Swarms</a>
+</nav>
+
+<section>
+  <h2>Connectors</h2>
+  <ul>
+  {{range .Connectors}}<li><strong>{{.Platform}}</strong> — rate {{.RateLimitPerConv}}/min · signing v{{.SigningSecretRef.Version}}</li>{{else}}<li class="muted">none</li>{{end}}
+  </ul>
+</section>
+<section>
+  <h2>Agent profiles</h2>
+  <ul>
+  {{range .Agents}}<li><strong>{{.Name}}</strong> — {{.Model}} · memory={{.MemoryScope}} · ${{.BudgetUSDPerHour}}/hr</li>{{else}}<li class="muted">none</li>{{end}}
+  </ul>
+</section>
+<section>
+  <h2>Swarms</h2>
+  <ul>
+  {{range .Swarms}}<li><strong>{{.ID}}</strong> — {{.Topology}}: {{range $i, $r := .Roster}}{{if $i}}, {{end}}{{$r}}{{end}}</li>{{else}}<li class="muted">none</li>{{end}}
+  </ul>
+</section>
+{{template "footer" .}}

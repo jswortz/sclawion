@@ -1,0 +1,45 @@
+{{template "header" .}}
+{{$tid := .TenantID}}
+<h1>Swarms — <code>{{$tid}}</code></h1>
+<p><a href="/ui/tenants/{{$tid}}">← back to tenant</a></p>
+
+<table>
+  <thead><tr><th>ID</th><th>Topology</th><th>Roster</th><th>Tokens</th><th>Wallclock</th><th>Deploys</th></tr></thead>
+  <tbody>
+  {{range .Swarms}}
+    <tr>
+      <td><code>{{.ID}}</code></td>
+      <td>{{.Topology}}</td>
+      <td>{{range $i, $r := .Roster}}{{if $i}}, {{end}}{{$r}}{{end}}</td>
+      <td>{{.BudgetEnvelope.MaxTokens}}</td>
+      <td>{{.BudgetEnvelope.MaxWallClock}}</td>
+      <td>{{.BudgetEnvelope.MaxDeploys}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="6" class="muted">No swarms defined yet.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+
+{{if eq .Caller.Role "owner"}}
+<section>
+  <h2>New swarm</h2>
+  <form hx-post="/v1/tenants/{{$tid}}/swarms" hx-ext="json-enc"
+        hx-on::after-request="if(event.detail.successful) location.reload()">
+    <label>ID <input name="id" pattern="[a-z][a-z0-9-]{1,62}" required></label>
+    <label>Topology
+      <select name="topology">
+        {{range .Topologies}}<option value="{{.}}">{{.}}</option>{{end}}
+      </select>
+    </label>
+    <fieldset>
+      <legend>Roster</legend>
+      {{range .Roles}}<label><input type="checkbox" name="roster" value="{{.}}"> {{.}}</label>{{end}}
+    </fieldset>
+    <label>Max tokens <input type="number" name="budget_envelope.max_tokens" value="500000"></label>
+    <label>Max deploys <input type="number" name="budget_envelope.max_deploys" value="3"></label>
+    <button type="submit">Create</button>
+  </form>
+</section>
+{{end}}
+{{template "footer" .}}

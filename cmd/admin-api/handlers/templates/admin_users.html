@@ -1,0 +1,37 @@
+{{template "header" .}}
+<h1>Admin users</h1>
+<table>
+  <thead><tr><th>Email</th><th>Role</th><th>Added by</th><th>Added at</th></tr></thead>
+  <tbody>
+  {{range .Admins}}
+    <tr>
+      <td>{{.Email}}</td>
+      <td>{{.Role}}</td>
+      <td class="muted">{{.AddedBy}}</td>
+      <td class="muted">{{.AddedAt.Format "2006-01-02"}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="4" class="muted">No admin users.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+
+{{if eq .Caller.Role "owner"}}
+<section>
+  <h2>Add / update admin user</h2>
+  <form hx-put="/v1/admin-users/{email}" hx-ext="json-enc"
+        hx-on::config-request="event.detail.path = event.detail.path.replace('{email}', encodeURIComponent(event.detail.parameters.email))"
+        hx-on::after-request="if(event.detail.successful) location.reload()">
+    <label>Email <input type="email" name="email" required></label>
+    <label>Role
+      <select name="role">
+        <option value="viewer">viewer</option>
+        <option value="operator">operator</option>
+        <option value="owner">owner</option>
+      </select>
+    </label>
+    <button type="submit">Save</button>
+  </form>
+</section>
+{{end}}
+{{template "footer" .}}

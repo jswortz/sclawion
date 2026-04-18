@@ -8,7 +8,7 @@ Read this before changing any code. It's the load-bearing context for the projec
 
 ## Architecture rules
 
-1. **Pub/Sub is the only path between connectors and Scion.** No direct calls from `cmd/ingress` or `cmd/emitter` into `pkg/scion`. Only `cmd/router` and `cmd/scion-bridge` may import `pkg/scion`.
+1. **Pub/Sub is the only path between connectors and Scion.** No direct calls from `cmd/ingress` or `cmd/emitter` into `pkg/scion`. Only `cmd/router` and `cmd/scion-bridge` may import `pkg/scion`. The config plane (`cmd/admin-api`) never imports `pkg/scion` either — it only writes Firestore + Secret Manager state that the data plane reads.
 2. **One normalized event schema** lives in `pkg/event/envelope.go` (CloudEvents-compliant, `spec_version: sclawion/v1`). Every connector encodes/decodes to this shape — never platform-specific structs across package boundaries.
 3. **Each connector implements three things**: `Verifier` (HMAC/signature), `Decoder` (platform → Event), `Encoder` (Event → platform message). Adding a new platform means adding a `pkg/connectors/<name>/` package; nothing else changes.
 4. **Stateless services.** All state lives in Firestore (correlation, nonce cache, idempotency) or Secret Manager (creds). Do not keep state in-process beyond a single request.
@@ -39,13 +39,15 @@ cmd/                 Cloud Run service entrypoints
   router/            inbound → Scion dispatcher
   scion-bridge/      Scion → outbound topic
   emitter/           outbound → platform (--platform flag)
+  admin-api/         IAP-fronted config plane (Firestore + Secret Manager writes, htmx UI)
 pkg/
   event/             normalized envelope + schema
   connectors/<p>/    Verifier/Decoder/Encoder per platform
   scion/             typed Scion Hub REST client
   correlation/       Firestore conversation↔agent store
-  secrets/           Secret Manager wrapper, lazy + cached
-  auth/              HMAC, OIDC, replay cache helpers
+  config/            tenant/connector/agent/swarm types + Store + RBAC + audit (admin-api)
+  secrets/           Secret Manager wrapper (Get + AddVersion), lazy + cached
+  auth/              HMAC, OIDC, IAP claims, replay cache helpers
   pubsub/            publish/ack helpers, ordering keys
   obs/               OpenTelemetry init (matches Scion's OTEL setup)
 deploy/

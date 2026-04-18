@@ -1,0 +1,65 @@
+{{template "header" .}}
+{{$tid := .TenantID}}
+<h1>Connectors — <code>{{$tid}}</code></h1>
+<p><a href="/ui/tenants/{{$tid}}">← back to tenant</a></p>
+
+<table>
+  <thead><tr><th>Platform</th><th>Webhook</th><th>Rate/conv</th><th>Replay cache</th><th>Signing v</th><th>OAuth v</th><th>Updated by</th></tr></thead>
+  <tbody>
+  {{range .Connectors}}
+    <tr>
+      <td><strong>{{.Platform}}</strong></td>
+      <td><code>{{.WebhookPath}}</code></td>
+      <td>{{.RateLimitPerConv}}</td>
+      <td>{{.ReplayCacheEnabled}}</td>
+      <td>{{.SigningSecretRef.Version}}</td>
+      <td>{{.OAuthTokenRef.Version}}</td>
+      <td class="muted">{{.UpdatedBy}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="7" class="muted">No connectors configured.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+
+{{if eq .Caller.Role "owner"}}
+<section>
+  <h2>Upsert connector</h2>
+  <form hx-put="/v1/tenants/{{$tid}}/connectors/{platform}" hx-ext="json-enc"
+        hx-on::config-request="event.detail.path = event.detail.path.replace('{platform}', event.detail.parameters.platform)"
+        hx-on::after-request="if(event.detail.successful) location.reload()">
+    <label>Platform
+      <select name="platform">
+        {{range .Platforms}}<option value="{{.}}">{{.}}</option>{{end}}
+      </select>
+    </label>
+    <label>Allowed channels (comma sep) <input name="allowed_channels"></label>
+    <label>Rate per conversation <input type="number" name="rate_limit_per_conv" value="60" min="0" max="600"></label>
+    <label><input type="checkbox" name="replay_cache_enabled" checked> Replay cache</label>
+    <button type="submit">Save</button>
+  </form>
+</section>
+
+<section>
+  <h2>Rotate secret</h2>
+  <form hx-post="/v1/tenants/{{$tid}}/connectors/{platform}/secrets:rotate" hx-ext="json-enc"
+        hx-on::config-request="event.detail.path = event.detail.path.replace('{platform}', event.detail.parameters.platform); delete event.detail.parameters.platform"
+        hx-on::after-request="if(event.detail.successful) location.reload()">
+    <label>Platform
+      <select name="platform">
+        {{range .Platforms}}<option value="{{.}}">{{.}}</option>{{end}}
+      </select>
+    </label>
+    <label>Kind
+      <select name="kind">
+        <option value="signing_secret">signing_secret</option>
+        <option value="oauth_token">oauth_token</option>
+      </select>
+    </label>
+    <label>Value <input type="password" name="value" required autocomplete="off"></label>
+    <label>Reason <input name="reason" placeholder="quarterly rotation"></label>
+    <button type="submit">Rotate</button>
+  </form>
+</section>
+{{end}}
+{{template "footer" .}}

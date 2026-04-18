@@ -1,0 +1,30 @@
+{{template "header" .}}
+<h1>Tenants</h1>
+<table>
+  <thead><tr><th>ID</th><th>Display name</th><th>Status</th><th>Updated</th><th></th></tr></thead>
+  <tbody>
+  {{range .Tenants}}
+    <tr>
+      <td><code>{{.ID}}</code></td>
+      <td>{{.DisplayName}}</td>
+      <td>{{if .Disabled}}<span class="muted">disabled</span>{{else}}active{{end}}</td>
+      <td class="muted">{{.UpdatedAt.Format "2006-01-02"}}</td>
+      <td><a href="/ui/tenants/{{.ID}}">open →</a></td>
+    </tr>
+  {{else}}
+    <tr><td colspan="5" class="muted">No tenants yet.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+
+{{if eq .Caller.Role "owner"}}
+<section>
+  <h2>New tenant</h2>
+  <form hx-post="/v1/tenants" hx-ext="json-enc" hx-on::after-request="if(event.detail.successful) location.reload()">
+    <label>ID <input name="id" pattern="[a-z][a-z0-9-]{1,62}" required></label>
+    <label>Display name <input name="display_name" required></label>
+    <button type="submit">Create</button>
+  </form>
+</section>
+{{end}}
+{{template "footer" .}}
