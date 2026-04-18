@@ -8,10 +8,10 @@
 [![Built for: GCP](https://img.shields.io/badge/cloud-GCP-4285F4.svg)](docs/GCP_PATTERNS.md)
 [![Language: Go](https://img.shields.io/badge/lang-Go%201.22-00ADD8.svg)](go.mod)
 
-`sclawion` (a mashup of **Sc**ion + open**claw**ion) is the missing async surface
-for Scion: a stateless, GCP-native bridge that puts every chat platform on the
-same wire — **GCP Pub/Sub** — so a Scion agent fleet can be addressed as if it
-were a teammate sitting in your channel.
+`sclawion` is the missing async surface for [Scion](https://github.com/GoogleCloudPlatform/scion):
+a stateless, GCP-native bridge that puts every chat platform on the same wire
+— **GCP Pub/Sub** — so a Scion agent fleet can be addressed as if it were a
+teammate sitting in your channel.
 
 ```
 ┌──────────────┐                                              ┌──────────────┐
@@ -20,6 +20,26 @@ were a teammate sitting in your channel.
 └──────────────┘                                              └──────────────┘
                        Cloud Run · OIDC push · CMEK · Cloud Armor
 ```
+
+## At a glance
+
+The bridge sits between three layers — chat surfaces on top, the agent swarm in
+the middle, and (in the enterprise [CLAWPATH](docs/CLAWPATH.md) tier) a
+SCION-routed network underlay reaching into customer infrastructure on the
+bottom. The Pub/Sub envelope is the single contract between them.
+
+![Three-layer view](docs/figures/clawpath-layers.png)
+
+End-to-end, the same diagram with concrete GCP services and topic flow:
+
+![End-to-end architecture](docs/figures/clawpath-arch.png)
+
+> Both figures show the **CLAWPATH** enterprise tier (chat + swarm + SCION
+> network underlay). The base `sclawion` project is just the top two layers —
+> chat → ingress → Pub/Sub → router → Scion Hub → bridge → emitters → chat.
+> The SCION underlay is opt-in for customers who need agents to reach inside
+> private networks without BGP / VPN sprawl. See [`CLAWPATH.md`](docs/CLAWPATH.md)
+> and [`clawpath/SCION.md`](docs/clawpath/SCION.md) for the full story.
 
 ## Why this exists
 
