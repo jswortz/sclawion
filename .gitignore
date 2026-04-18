@@ -1,0 +1,44 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+go.work.sum
+vendor/
+
+# Build output
+/bin/
+/dist/
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+service-account*.json
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code workspace state
+.claude/cache/
+.claude/sessions/

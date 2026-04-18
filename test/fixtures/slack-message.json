@@ -1,0 +1,16 @@
+{
+  "token": "fixture",
+  "team_id": "T0001",
+  "api_app_id": "A0001",
+  "event_id": "Ev01ABCDEFGH",
+  "event_time": 1700000000,
+  "type": "event_callback",
+  "event": {
+    "type": "app_mention",
+    "user": "U0001",
+    "text": "<@U_BOT> hello",
+    "ts": "1700000000.000100",
+    "channel": "C0001",
+    "thread_ts": "1700000000.000100"
+  }
+}
