@@ -30,6 +30,7 @@ Read this before changing any code. It's the load-bearing context for the projec
 | Discord      | `X-Signature-Ed25519`, `X-Signature-Timestamp`       | Ed25519 over `{ts}{body}` |
 | Google Chat  | `Authorization: Bearer <JWT>`                        | RS256 JWT, audience = project |
 | WhatsApp     | `X-Hub-Signature-256`                                | HMAC-SHA256 over raw body |
+| iMessage     | `sb-signature` (Sendblue) or `X-BlueBubbles-Signature` | HMAC-SHA256 over raw body (via bridge) |
 
 ## Layout
 

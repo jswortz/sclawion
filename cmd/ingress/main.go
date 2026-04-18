@@ -23,6 +23,7 @@ func main() {
 	mux.HandleFunc("/v1/discord", todo("discord"))
 	mux.HandleFunc("/v1/gchat", todo("gchat"))
 	mux.HandleFunc("/v1/whatsapp", todo("whatsapp"))
+	mux.HandleFunc("/v1/imessage", todo("imessage"))
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})

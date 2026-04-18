@@ -93,7 +93,7 @@ func basePage(d Deps, r *http.Request, title, active string) pageData {
 		Env:        d.Env,
 		Title:      title,
 		ActiveNav:  active,
-		Platforms:  []event.Platform{event.PlatformSlack, event.PlatformDiscord, event.PlatformGChat, event.PlatformWhatsApp},
+		Platforms:  []event.Platform{event.PlatformSlack, event.PlatformDiscord, event.PlatformGChat, event.PlatformWhatsApp, event.PlatformIMessage},
 		Topologies: []string{"pipeline", "fanout", "mesh", "hierarchical"},
 		Roles:      []string{"planner", "coder", "reviewer", "deployer", "monitor"},
 		Memories:   []string{"conversation", "user"},

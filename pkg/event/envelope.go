@@ -31,6 +31,7 @@ const (
 	PlatformDiscord  Platform = "discord"
 	PlatformGChat    Platform = "gchat"
 	PlatformWhatsApp Platform = "whatsapp"
+	PlatformIMessage Platform = "imessage" // via a webhook bridge (Sendblue, BlueBubbles, Loop)
 )
 
 // Envelope is the wire format on Pub/Sub. JSON-encoded as the message data;

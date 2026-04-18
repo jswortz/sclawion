@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	platform := flag.String("platform", "", "one of: slack|discord|gchat|whatsapp")
+	platform := flag.String("platform", "", "one of: slack|discord|gchat|whatsapp|imessage")
 	flag.Parse()
 	if *platform == "" {
 		log.Fatal("--platform is required")

@@ -26,6 +26,7 @@ var validPlatforms = map[event.Platform]struct{}{
 	event.PlatformDiscord:  {},
 	event.PlatformGChat:    {},
 	event.PlatformWhatsApp: {},
+	event.PlatformIMessage: {},
 }
 
 // validTopologies and validRoles mirror docs/clawpath/SWARMS.md.
